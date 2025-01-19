@@ -1,52 +1,50 @@
 /**
- * Schütteln um ein zufälliges Bild auszusuchen
- */
-/**
  * Knopf A um das Bild zu senden
  */
 /**
  * Bild empfangen
  */
-/**
- * Spiel zurücksetzen
- */
+// Spiel zurücksetzen
 radio.onReceivedNumber(function (receivedNumber) {
     if (receivedNumber == 99) {
         zurücksetzen()
     } else {
-        hand_funk = receivedNumber
+        hand_gegner = receivedNumber
     }
 })
 function zurücksetzen () {
-    hand = 0
-    hand_funk = -1
+    mein_eigen = 0
+    hand_gegner = -1
     gesendet = 0
 }
 input.onButtonPressed(Button.A, function () {
     if (gesendet == 0) {
-        radio.sendNumber(hand)
+        radio.sendNumber(mein_eigen)
         gesendet = 1
     }
 })
 function anzeigeErgebnis () {
-    if (hand == hand_funk) {
+    if (mein_eigen == hand_gegner) {
         basic.showIcon(IconNames.Asleep)
-    } else if (hand == 1 && hand_funk == 3) {
+    } else if (mein_eigen == 1 && hand_gegner == 3) {
         basic.showIcon(IconNames.Happy)
-    } else if (hand == 2 && hand_funk == 1) {
+    } else if (mein_eigen == 2 && hand_gegner == 1) {
         basic.showIcon(IconNames.Happy)
-    } else if (hand == 3 && hand_funk == 2) {
+    } else if (mein_eigen == 3 && hand_gegner == 2) {
         basic.showIcon(IconNames.Happy)
     } else {
         basic.showIcon(IconNames.Sad)
     }
 }
+/**
+ * Schütteln um ein zufälliges Bild auszusuchen
+ */
 input.onGesture(Gesture.Shake, function () {
-    hand = randint(1, 3)
+    mein_eigen = randint(1, 3)
     gesendet = 0
 })
 function zeigeSSP () {
-    if (hand == 1) {
+    if (mein_eigen == 1) {
         basic.showLeds(`
             # # . . #
             # # . # .
@@ -54,7 +52,7 @@ function zeigeSSP () {
             # # . # .
             # # . . #
             `)
-    } else if (hand == 2) {
+    } else if (mein_eigen == 2) {
         basic.showLeds(`
             . . . . .
             . # # # .
@@ -62,7 +60,7 @@ function zeigeSSP () {
             . # # # .
             . . . . .
             `)
-    } else if (hand == 3) {
+    } else if (mein_eigen == 3) {
         basic.showLeds(`
             # # # # #
             # . . . #
@@ -85,12 +83,12 @@ input.onButtonPressed(Button.AB, function () {
     radio.sendNumber(99)
 })
 let gesendet = 0
-let hand = 0
-let hand_funk = 0
+let mein_eigen = 0
+let hand_gegner = 0
 radio.setGroup(1)
 zurücksetzen()
 basic.forever(function () {
-    if (gesendet == 1 && hand_funk != -1) {
+    if (gesendet == 1 && hand_gegner != -1) {
         anzeigeErgebnis()
     } else {
         zeigeSSP()
